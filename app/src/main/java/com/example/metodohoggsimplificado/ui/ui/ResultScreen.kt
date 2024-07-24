@@ -12,6 +12,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -100,6 +102,8 @@ fun ResultScreen(viewModel: HoggViewModel, navController: NavController) {
                             style = MaterialTheme.typography.headlineSmall,
                             color = Color.Black
                         )
+                        Spacer(modifier = Modifier.height(16.dp))
+
                     }
                 }
             } ?: run {
@@ -110,6 +114,15 @@ fun ResultScreen(viewModel: HoggViewModel, navController: NavController) {
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(16.dp)
                 )
+            }
+            Button (
+                onClick = { navController.popBackStack() },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF8B4513), // Marrón
+                    contentColor = Color.White
+                )
+            ) {
+                Text("Realizar nuevo cálculo")
             }
         }
     }
