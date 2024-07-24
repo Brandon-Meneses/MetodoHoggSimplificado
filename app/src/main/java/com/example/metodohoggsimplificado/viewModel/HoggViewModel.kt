@@ -6,6 +6,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.metodohoggsimplificado.database.HoggDatabase
+import com.example.metodohoggsimplificado.entidades.Coefficient
+import com.example.metodohoggsimplificado.entidades.E0Value
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,6 +17,8 @@ class HoggViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _result = MutableLiveData<Result>()
     val result: LiveData<Result> = _result
+
+
 
     fun calculate(d0: Double, dr: Double, r: Double, k: Double) {
         CoroutineScope(Dispatchers.IO).launch {

@@ -18,10 +18,10 @@ fun NavManager(activity: Activity) {
 
     NavHost(navController = navController, startDestination = "DataInputScreen") {
         composable("DataInputScreen") {
-            DataInputScreen(viewModel = hoggViewModel)
+            DataInputScreen(viewModel = hoggViewModel, navController = navController)
         }
         composable( "ResultScreen") {
-            ResultScreen(viewModel = hoggViewModel)
+            ResultScreen(viewModel = hoggViewModel,navController = navController)
         }
     }
 }

@@ -10,6 +10,11 @@ import com.example.metodohoggsimplificado.viewModel.HoggViewModel
 
 @Dao
 interface HoggDao {
+    @Query("SELECT * FROM coefficients")
+    suspend fun getAllCoefficients(): List<Coefficient>
+
+    @Query("SELECT * FROM e0_values")
+    suspend fun getAllE0Values(): List<E0Value>
     @Query("SELECT * FROM coefficients WHERE d0dr = :d0dr")
     fun getCoefficient(d0dr: Double): Coefficient?
 

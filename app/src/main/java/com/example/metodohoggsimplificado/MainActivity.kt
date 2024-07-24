@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.metodohoggsimplificado.database.prepopulateDatabase
 import com.example.metodohoggsimplificado.navigation.NavManager
 import com.example.metodohoggsimplificado.ui.theme.MetodoHoggSimplificadoTheme
+import com.example.metodohoggsimplificado.viewModel.HoggViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,6 +24,10 @@ class MainActivity : ComponentActivity() {
             NavManager(activity = this)
         }
         prepopulateDatabase(this)
+
+
+
     }
 }
+
 
