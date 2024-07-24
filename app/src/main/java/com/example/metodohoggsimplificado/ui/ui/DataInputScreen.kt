@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -141,8 +142,9 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
 fun titleBar(name: String) {
     Text(
         text = name,
-        fontSize = 20.sp,
-        color = Color.White,
+        fontSize = 30.sp,
+        color = Color.Black,
+        fontWeight = FontWeight.Bold,
         style = MaterialTheme.typography.titleLarge,
         textAlign = TextAlign.Center,
         modifier = Modifier.fillMaxWidth()
