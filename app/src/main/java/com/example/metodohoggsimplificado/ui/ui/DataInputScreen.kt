@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -64,53 +65,49 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TextField(
+            OutlinedTextField(
                 value = d0,
                 onValueChange = { d0 = it },
                 label = { Text("Deflexión máxima D0 (ej. 45x10-2)") },
                 modifier = Modifier.fillMaxWidth(),
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.White,
-                    focusedIndicatorColor = Color(0xFF8B4513), // Marrón
-                    unfocusedIndicatorColor = Color(0xFF8B4513) // Marrón
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color(0xFF8B4513), // Marrón
+                    unfocusedBorderColor = Color(0xFF8B4513) // Marrón
                 )
             )
             Spacer(modifier = Modifier.height(16.dp))
-            TextField(
+            OutlinedTextField(
                 value = dr,
                 onValueChange = { dr = it },
                 label = { Text("Deflexión adicional DR (ej. 22x10-2)") },
                 modifier = Modifier.fillMaxWidth(),
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.White,
-                    focusedIndicatorColor = Color(0xFF8B4513), // Marrón
-                    unfocusedIndicatorColor = Color(0xFF8B4513) // Marrón
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color(0xFF8B4513), // Marrón
+                    unfocusedBorderColor = Color(0xFF8B4513) // Marrón
                 )
             )
             Spacer(modifier = Modifier.height(16.dp))
-            TextField(
+            OutlinedTextField(
                 value = r,
                 onValueChange = { r = it },
                 label = { Text("Distancia radial R (cm)") },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.White,
-                    focusedIndicatorColor = Color(0xFF8B4513), // Marrón
-                    unfocusedIndicatorColor = Color(0xFF8B4513) // Marrón
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color(0xFF8B4513), // Marrón
+                    unfocusedBorderColor = Color(0xFF8B4513) // Marrón
                 )
             )
             Spacer(modifier = Modifier.height(16.dp))
-            TextField(
+            OutlinedTextField(
                 value = k,
                 onValueChange = { k = it },
                 label = { Text("Coeficiente k") },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.White,
-                    focusedIndicatorColor = Color(0xFF8B4513), // Marrón
-                    unfocusedIndicatorColor = Color(0xFF8B4513) // Marrón
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = Color(0xFF8B4513), // Marrón
+                    unfocusedBorderColor = Color(0xFF8B4513) // Marrón
                 )
             )
             Spacer(modifier = Modifier.height(24.dp))
@@ -149,6 +146,7 @@ fun titleBar(name: String) {
         modifier = Modifier.fillMaxWidth()
     )
 }
+
 
 
 fun parseScientificNotation(input: String): Double {
