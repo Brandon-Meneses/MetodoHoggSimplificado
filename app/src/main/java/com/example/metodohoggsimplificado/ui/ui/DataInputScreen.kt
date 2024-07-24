@@ -1,6 +1,7 @@
 package com.example.metodohoggsimplificado.ui.ui
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -119,6 +120,7 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
                         val rValue = r.toDouble()
                         val kValue = k.toDouble()
                         viewModel.calculate(d0Value, drValue, rValue, kValue)
+
                         navController.navigate("ResultScreen")
                     } catch (e: NumberFormatException) {
                         // Manejar el error de formato
