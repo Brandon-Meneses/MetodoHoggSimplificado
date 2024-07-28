@@ -1,6 +1,7 @@
 package com.example.metodohoggsimplificado.ui.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.metodohoggsimplificado.R
+import com.example.metodohoggsimplificado.database.HoggDatabase
 import com.example.metodohoggsimplificado.viewModel.HoggViewModel
 import kotlin.math.pow
 
@@ -161,6 +163,8 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
         }
     }
 }
+
+
 
 
 @Composable

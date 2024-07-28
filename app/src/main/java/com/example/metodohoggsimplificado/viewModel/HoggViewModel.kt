@@ -5,18 +5,42 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.example.metodohoggsimplificado.database.HoggDao
 import com.example.metodohoggsimplificado.database.HoggDatabase
-import com.example.metodohoggsimplificado.entidades.Coefficient
-import com.example.metodohoggsimplificado.entidades.E0Value
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HoggViewModel(application: Application) : AndroidViewModel(application) {
     private val db: HoggDatabase = HoggDatabase.getDatabase(application)
+    private val hoggDao: HoggDao = db.hoggDao()
 
     private val _result = MutableLiveData<Result>()
     val result: LiveData<Result> = _result
+
+    init {
+        viewModelScope.launch {
+            printDatabaseValues()
+        }
+    }
+
+    private suspend fun printDatabaseValues() {
+        withContext(Dispatchers.IO) {
+            // Imprimir valores de la tabla Coefficients
+            val coefficients = hoggDao.getAllCoefficients()
+            for (coefficient in coefficients) {
+                Log.d("HoggDatabase", "Coefficient: id=${coefficient.id}, d0dr=${coefficient.d0dr}, r20=${coefficient.r20}, r30=${coefficient.r30}, r40=${coefficient.r40}, r50=${coefficient.r50}, r60=${coefficient.r60}, r70=${coefficient.r70}, r80=${coefficient.r80}, r90=${coefficient.r90}, r100=${coefficient.r100}")
+            }
+
+            // Imprimir valores de la tabla E0Values
+            val e0Values = hoggDao.getAllE0Values()
+            for (e0Value in e0Values) {
+                Log.d("HoggDatabase", "E0Value: d0r50=${e0Value.d0r50}, e0=${e0Value.e0}")
+            }
+        }
+    }
 
 
 

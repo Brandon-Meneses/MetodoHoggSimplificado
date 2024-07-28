@@ -11,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.metodohoggsimplificado.database.prepopulateDatabase
 import com.example.metodohoggsimplificado.navigation.NavManager
 import com.example.metodohoggsimplificado.ui.theme.MetodoHoggSimplificadoTheme
 import com.example.metodohoggsimplificado.viewModel.HoggViewModel
@@ -23,7 +22,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             NavManager(activity = this)
         }
-        prepopulateDatabase(this)
 
 
 

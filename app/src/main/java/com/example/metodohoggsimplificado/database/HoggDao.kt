@@ -21,6 +21,12 @@ interface HoggDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertE0Values(e0Values: List<E0Value>)
+
+    @Query("SELECT * FROM coefficients")
+    fun getAllCoefficients(): List<Coefficient>
+
+    @Query("SELECT * FROM e0_values")
+    fun getAllE0Values(): List<E0Value>
 }
 
 
