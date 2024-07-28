@@ -1,5 +1,6 @@
 package com.example.metodohoggsimplificado.ui.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
@@ -37,6 +39,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.metodohoggsimplificado.R
 import com.example.metodohoggsimplificado.viewModel.HoggViewModel
@@ -67,89 +70,86 @@ fun ResultScreen(viewModel: HoggViewModel, navController: NavController) {
             )
         }
     ) { innerPadding ->
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .paint(
-                    painter = painterResource(id = R.drawable.fondo),
-                    contentScale = ContentScale.FillBounds
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xAAFFFFFF),
+                            Color(0xAAFFFFFF)
+                        )
+                    )
                 )
+                .padding(16.dp)
+                .padding(innerPadding),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                Color(0xAAFFFFFF),
-                                Color(0xAAFFFFFF)
-                            )
-                        )
-                    )
-                    .padding(16.dp)
-                    .padding(innerPadding),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                result?.let {
-                    Card(
-                        shape = RoundedCornerShape(16.dp),
-                        elevation = CardDefaults.cardElevation(8.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color(0xFFFFE082) // Amarillo claro
-                        )
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = "Módulo Resiliente (E0)",
-                                style = MaterialTheme.typography.titleMedium,
-                                color = Color(0xFF8B4513) // Marrón
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(
-                                text = "${it.e0} kg/cm2",
-                                style = MaterialTheme.typography.headlineSmall,
-                                color = Color.Black
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Text(
-                                text = "Valor de Soporte (CBR)",
-                                style = MaterialTheme.typography.titleMedium,
-                                color = Color(0xFF8B4513) // Marrón
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(
-                                text = "${it.cbr} %",
-                                style = MaterialTheme.typography.headlineSmall,
-                                color = Color.Black
-                            )
-                        }
-                    }
-                } ?: run {
-                    Text(
-                        text = "Ingrese los datos para ver los resultados",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = Color.Gray,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(16.dp)
-                    )
-                }
-                Button(
-                    onClick = { navController.popBackStack() },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF8B4513), // Marrón
-                        contentColor = Color.White
+            result?.let {
+                Card(
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = CardDefaults.cardElevation(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFFFFE082) // Amarillo claro
                     )
                 ) {
-                    Text("Realizar nuevo cálculo")
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Módulo Resiliente (E0)",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color(0xFF8B4513) // Marrón
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "${it.e0} kg/cm2",
+                            style = MaterialTheme.typography.headlineSmall,
+                            color = Color.Black
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = "Valor de Soporte (CBR)",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color(0xFF8B4513) // Marrón
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "${it.cbr} %",
+                            style = MaterialTheme.typography.headlineSmall,
+                            color = Color.Black
+                        )
+                    }
                 }
+            } ?: run {
+                Text(
+                    text = "Ingrese los datos para ver los resultados",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Color.Gray,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(16.dp)
+                )
             }
+            Button(
+                onClick = { navController.popBackStack() },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF8B4513), // Marrón
+                    contentColor = Color.White
+                )
+            ) {
+                Text("Realizar nuevo cálculo")
+            }
+            Spacer(modifier = Modifier.height(100.dp))
+            Image(
+                painter = painterResource(id = R.drawable.fondo),
+                contentDescription = null,
+                modifier = Modifier.size(200.dp),
+            )
         }
     }
 
