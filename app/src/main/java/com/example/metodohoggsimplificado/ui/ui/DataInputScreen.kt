@@ -24,10 +24,16 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
@@ -64,6 +70,9 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
     var r by remember { mutableStateOf("") }
     var k by remember { mutableStateOf("") }
     var showError by remember { mutableStateOf(false) }
+    val options = listOf("20", "30", "40", "50", "60", "70", "80", "90", "100")
+    var expanded by remember { mutableStateOf(false) }
+    var selectedOption by remember { mutableStateOf(options.first()) }
 
     Scaffold(
         topBar = {
@@ -159,20 +168,43 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
                         }
                         item { Spacer(modifier = Modifier.height(16.dp)) }
                         item {
-                            OutlinedTextField(
-                                value = r,
-                                onValueChange = {
-                                    r = it
-                                    showError = false
-                                },
-                                label = { Text("Distancia radial R en cm") },
-                                modifier = Modifier.fillMaxWidth(),
-                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                                colors = TextFieldDefaults.outlinedTextFieldColors(
-                                    focusedBorderColor = Color(0xFF8B4513),
-                                    unfocusedBorderColor = Color(0xFF8B4513)
+                            ExposedDropdownMenuBox(
+                                expanded = expanded,
+                                onExpandedChange = { expanded = !expanded }
+                            ) {
+                                OutlinedTextField(
+                                    readOnly = true,
+                                    value = selectedOption,
+                                    onValueChange = { },
+                                    label = { Text("Distancia radial R en cm") },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .menuAnchor(),
+                                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                                        focusedBorderColor = Color(0xFF8B4513),
+                                        unfocusedBorderColor = Color(0xFF8B4513)
+                                    ),
+                                    trailingIcon = {
+                                        ExposedDropdownMenuDefaults.TrailingIcon(
+                                            expanded = expanded
+                                        )
+                                    }
                                 )
-                            )
+                                ExposedDropdownMenu(
+                                    expanded = expanded,
+                                    onDismissRequest = { expanded = false }
+                                ) {
+                                    options.forEach { selectionOption ->
+                                        DropdownMenuItem(
+                                            text = { Text(selectionOption) },
+                                            onClick = {
+                                                selectedOption = selectionOption
+                                                expanded = false
+                                            }
+                                        )
+                                    }
+                                }
+                            }
                         }
                         item { Spacer(modifier = Modifier.height(16.dp)) }
                         item {
@@ -206,7 +238,7 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
                                     try {
                                         val d0Value = parseScientificNotation(d0)
                                         val drValue = parseScientificNotation(dr)
-                                        val rValue = r.toDouble()
+                                        val rValue = selectedOption.toDouble()
                                         val kValue = k.toDouble()
                                         viewModel.calculate(d0Value, drValue, rValue, kValue)
                                         navController.navigate("ResultScreen")
@@ -232,7 +264,6 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
         }
     )
 }
-
 
 
 @Composable
