@@ -31,7 +31,9 @@ abstract class HoggDatabase : RoomDatabase() {
                     "hogg-database"
                 )
                     .createFromAsset("hogg-database.db")
+                    .fallbackToDestructiveMigration()
                     .build()
+
 
 
                 INSTANCE = instance
