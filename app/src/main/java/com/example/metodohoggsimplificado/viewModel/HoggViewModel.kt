@@ -52,7 +52,10 @@ class HoggViewModel(application: Application) : AndroidViewModel(application) {
 
     fun calculate(d0: Double, dr: Double, r: Double, k: Double) {
         viewModelScope.launch(Dispatchers.IO) {
-            val d0dr = String.format("%.2f", d0 / dr).toDouble()
+            val adjustedD0 = adjustValue(d0)
+            val adjustedDr = adjustValue(dr)
+
+            val d0dr = String.format("%.2f", adjustedD0 / adjustedDr).toDouble()
             Log.d("HoggViewModel", "d0dr: $d0dr")
             val coefficient = hoggDao.getCoefficient(d0dr)
             if (coefficient == null) {
@@ -80,7 +83,7 @@ class HoggViewModel(application: Application) : AndroidViewModel(application) {
             }
             Log.d("HoggViewModel", "r50: $r50")
 
-            val d0WithoutScale = d0 * 100  // Multiplica por 100 para eliminar "x10-2"
+            val d0WithoutScale = adjustedD0 * 100  // Multiplica por 100 para eliminar "x10-2"
             val d0r50 = String.format("%.1f", d0WithoutScale * r50).toDouble()
             Log.d("HoggViewModel", "d0r50: $d0r50")
 
@@ -94,6 +97,11 @@ class HoggViewModel(application: Application) : AndroidViewModel(application) {
             Log.d("HoggViewModel", "cbrPercentage: $cbrPercentage%")
             _result.postValue(Result(e0 = e0, cbr = cbrPercentage))
         }
+    }
+
+    private fun adjustValue(value: Double): Double {
+        // Si el valor es mayor que 1, asumimos que está en la escala correcta
+        return if (value > 1) value / 100 else value
     }
 
     private suspend fun calculateE0(d0r50: Double): Int {

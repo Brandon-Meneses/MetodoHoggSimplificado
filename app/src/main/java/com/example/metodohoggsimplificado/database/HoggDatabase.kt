@@ -43,29 +43,3 @@ abstract class HoggDatabase : RoomDatabase() {
     }
 }
 
-
-fun populateDatabase(context: Context, db: SupportSQLiteDatabase) {
-    CoroutineScope(Dispatchers.IO).launch {
-        try {
-            context.assets.open("data.sql").use { inputStream ->
-                BufferedReader(InputStreamReader(inputStream)).use { reader ->
-                    var line: String?
-                    while (reader.readLine().also { line = it } != null) {
-                        if (line!!.trim().isNotEmpty()) {
-                            try {
-                                db.execSQL(line!!)
-                                Log.d("Database", "Executed SQL: $line")
-                            } catch (e: Exception) {
-                                Log.e("Database", "Error executing SQL: $line", e)
-                            }
-                        }
-                    }
-                }
-            }
-            Log.d("Database", "Database populated successfully from data.sql")
-        } catch (e: Exception) {
-            Log.e("Database", "Error populating database from data.sql", e)
-        }
-    }
-}
-

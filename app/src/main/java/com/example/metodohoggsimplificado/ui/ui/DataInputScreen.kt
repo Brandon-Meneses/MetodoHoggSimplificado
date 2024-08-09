@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +16,9 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Divider
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material.TextField
@@ -66,116 +70,134 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
             )
         }
     ) {
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
-                .imePadding(), // Asegura que el contenido se ajusta cuando el teclado está visible
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(top = it.calculateTopPadding()) // Considerar el padding del Scaffold
         ) {
-            item {
-                Image(
-                    painter = painterResource(id = R.drawable.fondo),
-                    contentDescription = null,
-                    modifier = Modifier.size(200.dp),
-                )
-            }
-            item { Spacer(modifier = Modifier.height(50.dp)) }
-            item {
-                OutlinedTextField(
-                    value = d0,
-                    onValueChange = {
-                        d0 = it
-                        showError = false
-                    },
-                    label = { Text("Deflexión máxima D0 (ej. 45x10-2)") },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = Color(0xFF8B4513), // Marrón
-                        unfocusedBorderColor = Color(0xFF8B4513) // Marrón
-                    )
-                )
-            }
-            item { Spacer(modifier = Modifier.height(16.dp)) }
-            item {
-                OutlinedTextField(
-                    value = dr,
-                    onValueChange = {
-                        dr = it
-                        showError = false
-                    },
-                    label = { Text("Deflexión adicional DR (ej. 22x10-2)") },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = Color(0xFF8B4513), // Marrón
-                        unfocusedBorderColor = Color(0xFF8B4513) // Marrón
-                    )
-                )
-            }
-            item { Spacer(modifier = Modifier.height(16.dp)) }
-            item {
-                OutlinedTextField(
-                    value = r,
-                    onValueChange = {
-                        r = it
-                        showError = false
-                    },
-                    label = { Text("Distancia radial R (cm)") },
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = Color(0xFF8B4513), // Marrón
-                        unfocusedBorderColor = Color(0xFF8B4513) // Marrón
-                    )
-                )
-            }
-            item { Spacer(modifier = Modifier.height(16.dp)) }
-            item {
-                OutlinedTextField(
-                    value = k,
-                    onValueChange = {
-                        k = it
-                        showError = false
-                    },
-                    label = { Text("Coeficiente k") },
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = Color(0xFF8B4513), // Marrón
-                        unfocusedBorderColor = Color(0xFF8B4513) // Marrón
-                    )
-                )
-            }
-            item { Spacer(modifier = Modifier.height(24.dp)) }
-            item {
-                if (showError) {
-                    Text(
-                        text = "Por favor, ingrese valores válidos.",
-                        color = Color.Red,
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(bottom = 8.dp)
+            Divider(color = Color.Black, thickness = 2.dp) // Línea separadora
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+                    .imePadding(), // Asegura que el contenido se ajusta cuando el teclado está visible
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .size(200.dp)
+                            .border(
+                                2.dp,
+                                Color.Black,
+                                shape = RoundedCornerShape(8.dp)
+                            ) // Aquí defines el marco
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.fondo),
+                            contentDescription = null,
+                            modifier = Modifier.size(200.dp),
+                        )
+                    }
+                }
+                item { Spacer(modifier = Modifier.height(50.dp)) }
+                item {
+                    OutlinedTextField(
+                        value = d0,
+                        onValueChange = {
+                            d0 = it
+                            showError = false
+                        },
+                        label = { Text("Deflexión máxima D0 en mm (ej. 45x10-2 )") },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = Color(0xFF8B4513), // Marrón
+                            unfocusedBorderColor = Color(0xFF8B4513) // Marrón
+                        )
                     )
                 }
-                Button(
-                    onClick = {
-                        try {
-                            val d0Value = parseScientificNotation(d0)
-                            val drValue = parseScientificNotation(dr)
-                            val rValue = r.toDouble()
-                            val kValue = k.toDouble()
-                            viewModel.calculate(d0Value, drValue, rValue, kValue)
-                            navController.navigate("ResultScreen")
-                        } catch (e: NumberFormatException) {
-                            showError = true
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF8B4513) // Marrón
+                item { Spacer(modifier = Modifier.height(16.dp)) }
+                item {
+                    OutlinedTextField(
+                        value = dr,
+                        onValueChange = {
+                            dr = it
+                            showError = false
+                        },
+                        label = { Text("Deflexión adicional DR en mm (ej. 22x10-2)") },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = Color(0xFF8B4513), // Marrón
+                            unfocusedBorderColor = Color(0xFF8B4513) // Marrón
+                        )
                     )
-                ) {
-                    Text("Calcular", color = Color.White)
+                }
+                item { Spacer(modifier = Modifier.height(16.dp)) }
+                item {
+                    OutlinedTextField(
+                        value = r,
+                        onValueChange = {
+                            r = it
+                            showError = false
+                        },
+                        label = { Text("Distancia radial R en cm") },
+                        modifier = Modifier.fillMaxWidth(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = Color(0xFF8B4513), // Marrón
+                            unfocusedBorderColor = Color(0xFF8B4513) // Marrón
+                        )
+                    )
+                }
+                item { Spacer(modifier = Modifier.height(16.dp)) }
+                item {
+                    OutlinedTextField(
+                        value = k,
+                        onValueChange = {
+                            k = it
+                            showError = false
+                        },
+                        label = { Text("Coeficiente k") },
+                        modifier = Modifier.fillMaxWidth(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = Color(0xFF8B4513), // Marrón
+                            unfocusedBorderColor = Color(0xFF8B4513) // Marrón
+                        )
+                    )
+                }
+                item { Spacer(modifier = Modifier.height(24.dp)) }
+                item {
+                    if (showError) {
+                        Text(
+                            text = "Por favor, ingrese valores válidos.",
+                            color = Color.Red,
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                    }
+                    Button(
+                        onClick = {
+                            try {
+                                val d0Value = parseScientificNotation(d0)
+                                val drValue = parseScientificNotation(dr)
+                                val rValue = r.toDouble()
+                                val kValue = k.toDouble()
+                                viewModel.calculate(d0Value, drValue, rValue, kValue)
+                                navController.navigate("ResultScreen")
+                            } catch (e: NumberFormatException) {
+                                showError = true
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF8B4513) // Marrón
+                        )
+                    ) {
+                        Text("Calcular", color = Color.White)
+                    }
                 }
             }
         }
