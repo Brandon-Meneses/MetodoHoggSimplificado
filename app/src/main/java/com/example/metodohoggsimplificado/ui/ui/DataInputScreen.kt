@@ -74,6 +74,7 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
     var expanded by remember { mutableStateOf(false) }
     var selectedOption by remember { mutableStateOf(options.first()) }
 
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -107,7 +108,7 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(horizontal = 16.dp)
+                            .padding(horizontal = 8.dp) // Espacio horizontal reducido
                             .clip(RoundedCornerShape(16.dp)) // Bordes redondeados
                             .shadow(4.dp)
                             .background(Color.White)
@@ -142,8 +143,13 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
                                     d0 = it
                                     showError = false
                                 },
-                                label = { Text("Deflexión máxima D0 en mm (ej. 45x10-2)") },
-                                modifier = Modifier.fillMaxWidth(),
+                                label = { Text("Deflexión máxima D0 en mm (ej. 45x10-2)", fontSize = 16.sp, textAlign = TextAlign.Center, fontWeight = Bold) }, // Aumentar tamaño del texto
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 8.dp).align(
+                                        Alignment.CenterHorizontally
+                                    ), // Reducción de margen horizontal
+                                textStyle = MaterialTheme.typography.bodyLarge.copy(fontSize = 24.sp, textAlign = TextAlign.Center), // Aumentar tamaño del texto en el campo
                                 colors = TextFieldDefaults.outlinedTextFieldColors(
                                     focusedBorderColor = Color(0xFF8B4513), // Marrón
                                     unfocusedBorderColor = Color(0xFF8B4513)
@@ -158,8 +164,13 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
                                     dr = it
                                     showError = false
                                 },
-                                label = { Text("Deflexión adicional DR en mm (ej. 22x10-2)") },
-                                modifier = Modifier.fillMaxWidth(),
+                                label = { Text("Deflexión adicional DR en mm (ej. 22x10-2)", fontSize = 16.sp, textAlign = TextAlign.Center, fontWeight = Bold) }, // Aumentar tamaño del texto
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 8.dp).align(
+                                        Alignment.CenterHorizontally
+                                    ),
+                                textStyle = MaterialTheme.typography.bodyLarge.copy(fontSize = 24.sp, textAlign = TextAlign.Center), // Aumentar tamaño del texto en el campo
                                 colors = TextFieldDefaults.outlinedTextFieldColors(
                                     focusedBorderColor = Color(0xFF8B4513),
                                     unfocusedBorderColor = Color(0xFF8B4513)
@@ -176,10 +187,14 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
                                     readOnly = true,
                                     value = selectedOption,
                                     onValueChange = { },
-                                    label = { Text("Distancia radial R en cm") },
+                                    label = { Text("Distancia radial R en cm", style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center, fontWeight = Bold) },
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .menuAnchor(),
+                                        .menuAnchor()
+                                        .padding(horizontal = 8.dp).align(
+                                            Alignment.CenterHorizontally
+                                        ),
+                                    textStyle = MaterialTheme.typography.bodyLarge.copy(fontSize = 24.sp, textAlign = TextAlign.Center),
                                     colors = TextFieldDefaults.outlinedTextFieldColors(
                                         focusedBorderColor = Color(0xFF8B4513),
                                         unfocusedBorderColor = Color(0xFF8B4513)
@@ -196,7 +211,7 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
                                 ) {
                                     options.forEach { selectionOption ->
                                         DropdownMenuItem(
-                                            text = { Text(selectionOption) },
+                                            text = { Text(selectionOption, style = MaterialTheme.typography.bodyLarge.copy(fontSize = 22.sp, textAlign = TextAlign.Center)) },
                                             onClick = {
                                                 selectedOption = selectionOption
                                                 expanded = false
@@ -214,8 +229,13 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
                                     k = it
                                     showError = false
                                 },
-                                label = { Text("Coeficiente k") },
-                                modifier = Modifier.fillMaxWidth(),
+                                label = { Text("Coeficiente k", style = MaterialTheme.typography.bodyLarge, fontWeight = Bold) }, // Aumentar tamaño del texto
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 8.dp).align(
+                                        Alignment.CenterHorizontally
+                                    ),
+                                textStyle = MaterialTheme.typography.bodyLarge.copy(fontSize = 24.sp, textAlign = TextAlign.Center), // Aumentar tamaño del texto en el campo
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                 colors = TextFieldDefaults.outlinedTextFieldColors(
                                     focusedBorderColor = Color(0xFF8B4513),
@@ -230,7 +250,8 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
                                     text = "Por favor, ingrese valores válidos.",
                                     color = Color.Red,
                                     style = MaterialTheme.typography.bodyMedium,
-                                    modifier = Modifier.padding(bottom = 8.dp)
+                                    modifier = Modifier.padding(bottom = 8.dp),
+                                    textAlign = TextAlign.Center
                                 )
                             }
                             Button(
@@ -255,10 +276,11 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
                                     contentColor = Color.White
                                 )
                             ) {
-                                Text("Calcular", style = MaterialTheme.typography.bodyLarge)
+                                Text("Calcular", style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp, textAlign = TextAlign.Center))
                             }
                         }
                     }
+
                 }
             }
         }
