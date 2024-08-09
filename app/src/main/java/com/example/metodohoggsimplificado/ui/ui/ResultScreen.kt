@@ -51,9 +51,7 @@ fun ResultScreen(viewModel: HoggViewModel, navController: NavController) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = {
-                    titleBar("Resultados")
-                },
+                title = { Text("Resultados") },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = Color(0xFFFFD700) // Amarillo
                 ),
@@ -66,7 +64,6 @@ fun ResultScreen(viewModel: HoggViewModel, navController: NavController) {
                         )
                     }
                 }
-
             )
         }
     ) { innerPadding ->
@@ -87,43 +84,53 @@ fun ResultScreen(viewModel: HoggViewModel, navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             result?.let {
-                Card(
-                    shape = RoundedCornerShape(16.dp),
-                    elevation = CardDefaults.cardElevation(8.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFFFFE082) // Amarillo claro
-                    )
-                ) {
-                    Column(
+                if (it.error != null) {
+                    Text(
+                        text = it.error,
+                        color = Color.Red,
+                        style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        textAlign = TextAlign.Center
+                    )
+                } else {
+                    Card(
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = CardDefaults.cardElevation(8.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = Color(0xFFFFE082) // Amarillo claro
+                        )
                     ) {
-                        Text(
-                            text = "Módulo Resiliente (E0)",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = Color(0xFF8B4513) // Marrón
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "${it.e0} kg/cm2",
-                            style = MaterialTheme.typography.headlineSmall,
-                            color = Color.Black
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "Valor de Soporte (CBR)",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = Color(0xFF8B4513) // Marrón
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "${it.cbr} %",
-                            style = MaterialTheme.typography.headlineSmall,
-                            color = Color.Black
-                        )
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Módulo Resiliente (E0)",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = Color(0xFF8B4513) // Marrón
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "${it.e0} kg/cm2",
+                                style = MaterialTheme.typography.headlineSmall,
+                                color = Color.Black
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "Valor de Soporte (CBR)",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = Color(0xFF8B4513) // Marrón
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "${it.cbr} %",
+                                style = MaterialTheme.typography.headlineSmall,
+                                color = Color.Black
+                            )
+                        }
                     }
                 }
             } ?: run {
@@ -152,7 +159,4 @@ fun ResultScreen(viewModel: HoggViewModel, navController: NavController) {
             )
         }
     }
-
 }
-
-

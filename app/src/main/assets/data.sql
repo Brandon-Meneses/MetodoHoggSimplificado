@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS coefficients (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     d0dr REAL NOT NULL,
     r20 REAL NOT NULL,
     r30 REAL NOT NULL,
@@ -12,11 +12,13 @@ CREATE TABLE IF NOT EXISTS coefficients (
     r100 REAL NOT NULL
 );
 
+-- Crear la tabla de E0Values
 CREATE TABLE IF NOT EXISTS e0_values (
     d0r50 REAL NOT NULL,
     e0 INTEGER NOT NULL,
     PRIMARY KEY(d0r50)
 );
+
 
 INSERT INTO coefficients (d0dr, r20, r30, r40, r50, r60, r70, r80, r90, r100) VALUES
 (1.25, 42.8, 64.1, 85.5, 106.9, 128.3, 149.6, 171.0, 192.4, 213.8),
@@ -296,6 +298,7 @@ INSERT INTO coefficients (d0dr, r20, r30, r40, r50, r60, r70, r80, r90, r100) VA
 (3.99, 11.9, 17.9, 23.9, 29.8, 35.8, 41.8, 47.7, 53.7, 59.7),
 (4.00, 11.9, 17.9, 23.8, 29.8, 35.8, 41.7, 47.7, 53.6, 59.6);
 
+-- Insertar datos en la tabla e0_values
 INSERT INTO e0_values (d0r50, e0) VALUES
 (300, 5150),
 (305, 5070),

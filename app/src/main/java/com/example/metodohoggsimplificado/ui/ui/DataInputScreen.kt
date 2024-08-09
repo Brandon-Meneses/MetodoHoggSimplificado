@@ -54,13 +54,12 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
     var dr by remember { mutableStateOf("") }
     var r by remember { mutableStateOf("") }
     var k by remember { mutableStateOf("") }
+    var showError by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = {
-                    titleBar("Método de Hogg Simplificado")
-                },
+                title = { Text("Método de Hogg Simplificado") },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = Color(0xFFFFD700) // Amarillo
                 )
@@ -86,7 +85,10 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
             item {
                 OutlinedTextField(
                     value = d0,
-                    onValueChange = { d0 = it },
+                    onValueChange = {
+                        d0 = it
+                        showError = false
+                    },
                     label = { Text("Deflexión máxima D0 (ej. 45x10-2)") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -99,7 +101,10 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
             item {
                 OutlinedTextField(
                     value = dr,
-                    onValueChange = { dr = it },
+                    onValueChange = {
+                        dr = it
+                        showError = false
+                    },
                     label = { Text("Deflexión adicional DR (ej. 22x10-2)") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -112,7 +117,10 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
             item {
                 OutlinedTextField(
                     value = r,
-                    onValueChange = { r = it },
+                    onValueChange = {
+                        r = it
+                        showError = false
+                    },
                     label = { Text("Distancia radial R (cm)") },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -126,7 +134,10 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
             item {
                 OutlinedTextField(
                     value = k,
-                    onValueChange = { k = it },
+                    onValueChange = {
+                        k = it
+                        showError = false
+                    },
                     label = { Text("Coeficiente k") },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -138,6 +149,14 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
             }
             item { Spacer(modifier = Modifier.height(24.dp)) }
             item {
+                if (showError) {
+                    Text(
+                        text = "Por favor, ingrese valores válidos.",
+                        color = Color.Red,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                }
                 Button(
                     onClick = {
                         try {
@@ -146,10 +165,9 @@ fun DataInputScreen(viewModel: HoggViewModel, navController: NavController) {
                             val rValue = r.toDouble()
                             val kValue = k.toDouble()
                             viewModel.calculate(d0Value, drValue, rValue, kValue)
-
                             navController.navigate("ResultScreen")
                         } catch (e: NumberFormatException) {
-                            // Manejar el error de formato
+                            showError = true
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),

@@ -1,6 +1,7 @@
 package com.example.metodohoggsimplificado.database
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -8,48 +9,19 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.metodohoggsimplificado.entidades.Coefficient
 import com.example.metodohoggsimplificado.entidades.E0Value
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
-@Database(entities = [Coefficient::class, E0Value::class], version = 2)
+@Database(entities = [Coefficient::class, E0Value::class], version = 1)
 abstract class HoggDatabase : RoomDatabase() {
     abstract fun hoggDao(): HoggDao
 
     companion object {
         @Volatile
         private var INSTANCE: HoggDatabase? = null
-
-        // Definición de la migración
-        val MIGRATION_1_2 = object : Migration(1, 2) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                // Eliminar tablas antiguas (si es necesario)
-                database.execSQL("DROP TABLE IF EXISTS coefficients")
-                database.execSQL("DROP TABLE IF EXISTS e0_values")
-
-                // Crear nuevas tablas
-                database.execSQL("""
-                    CREATE TABLE IF NOT EXISTS `coefficients` (
-                        `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-                        `d0dr` REAL NOT NULL, 
-                        `r20` REAL NOT NULL, 
-                        `r30` REAL NOT NULL, 
-                        `r40` REAL NOT NULL, 
-                        `r50` REAL NOT NULL, 
-                        `r60` REAL NOT NULL, 
-                        `r70` REAL NOT NULL, 
-                        `r80` REAL NOT NULL, 
-                        `r90` REAL NOT NULL, 
-                        `r100` REAL NOT NULL
-                    )
-                """.trimIndent())
-
-                database.execSQL("""
-                    CREATE TABLE IF NOT EXISTS `e0_values` (
-                        `d0r50` REAL NOT NULL, 
-                        `e0` INTEGER NOT NULL, 
-                        PRIMARY KEY(`d0r50`)
-                    )
-                """.trimIndent())
-            }
-        }
 
         fun getDatabase(context: Context): HoggDatabase {
             return INSTANCE ?: synchronized(this) {
@@ -58,11 +30,40 @@ abstract class HoggDatabase : RoomDatabase() {
                     HoggDatabase::class.java,
                     "hogg-database"
                 )
-                    .addMigrations(MIGRATION_1_2) // Agregar la migración aquí
+                    .createFromAsset("hogg-database.db")
                     .build()
+
+
                 INSTANCE = instance
                 instance
             }
         }
     }
 }
+
+
+fun populateDatabase(context: Context, db: SupportSQLiteDatabase) {
+    CoroutineScope(Dispatchers.IO).launch {
+        try {
+            context.assets.open("data.sql").use { inputStream ->
+                BufferedReader(InputStreamReader(inputStream)).use { reader ->
+                    var line: String?
+                    while (reader.readLine().also { line = it } != null) {
+                        if (line!!.trim().isNotEmpty()) {
+                            try {
+                                db.execSQL(line!!)
+                                Log.d("Database", "Executed SQL: $line")
+                            } catch (e: Exception) {
+                                Log.e("Database", "Error executing SQL: $line", e)
+                            }
+                        }
+                    }
+                }
+            }
+            Log.d("Database", "Database populated successfully from data.sql")
+        } catch (e: Exception) {
+            Log.e("Database", "Error populating database from data.sql", e)
+        }
+    }
+}
+
