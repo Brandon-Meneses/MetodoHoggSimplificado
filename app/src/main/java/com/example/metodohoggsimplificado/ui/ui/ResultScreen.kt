@@ -34,11 +34,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,9 +56,9 @@ fun ResultScreen(viewModel: HoggViewModel, navController: NavController) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Resultados") },
+                title = { Text("Resultados", style = MaterialTheme.typography.headlineSmall, fontWeight = Bold) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(0xFFFFD700) // Amarillo
+                    containerColor = Color(0xFFFFD700) // Amarillo vibrante
                 ),
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
@@ -65,115 +68,126 @@ fun ResultScreen(viewModel: HoggViewModel, navController: NavController) {
                             tint = Color.Black
                         )
                     }
-                }
+                },
+                modifier = Modifier.shadow(8.dp) // Sombra bajo la barra superior
             )
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            Color(0xAAFFFFFF),
-                            Color(0xAAFFFFFF)
-                        )
-                    )
-                )
-                .padding(innerPadding)
-        ) {
-            // Divider between the TopAppBar and content
-            Divider(color = Color.Black, thickness = 2.dp)
-
-            Column(
+        },
+        content = { paddingValues ->
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                result?.let {
-                    if (it.error != null) {
-                        Text(
-                            text = it.error,
-                            color = Color.Red,
-                            style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier.padding(16.dp),
-                            textAlign = TextAlign.Center
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color(0xFFFFF8E1),
+                                Color(0xFFFFE082)
+                            )
                         )
-                    } else {
-                        Card(
-                            shape = RoundedCornerShape(16.dp),
-                            elevation = CardDefaults.cardElevation(8.dp),
+                    )
+                    .padding(paddingValues)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        result?.let {
+                            if (it.error != null) {
+                                Text(
+                                    text = it.error,
+                                    color = Color.Red,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    modifier = Modifier.padding(16.dp),
+                                    textAlign = TextAlign.Center
+                                )
+                            } else {
+                                Card(
+                                    shape = RoundedCornerShape(16.dp),
+                                    elevation = CardDefaults.cardElevation(8.dp),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    colors = CardDefaults.cardColors(
+                                        containerColor = Color(0xFFFFD54F) // Amarillo claro
+                                    )
+                                ) {
+                                    Column(
+                                        modifier = Modifier.padding(16.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Text(
+                                            text = "Módulo Resiliente (E0)",
+                                            style = MaterialTheme.typography.titleMedium,
+                                            color = Color(0xFF8B4513)
+                                        )
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        Text(
+                                            text = "${it.e0} kg/cm2",
+                                            style = MaterialTheme.typography.headlineSmall,
+                                            color = Color.Black
+                                        )
+                                        Spacer(modifier = Modifier.height(16.dp))
+                                        Text(
+                                            text = "Valor de Soporte (CBR)",
+                                            style = MaterialTheme.typography.titleMedium,
+                                            color = Color(0xFF8B4513)
+                                        )
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        Text(
+                                            text = "${it.cbr} %",
+                                            style = MaterialTheme.typography.headlineSmall,
+                                            color = Color.Black
+                                        )
+                                    }
+                                }
+                            }
+                        } ?: run {
+                            Text(
+                                text = "Ingrese los datos para ver los resultados",
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = Color.Gray,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(16.dp)
+                            )
+                        }
+                        Button(
+                            onClick = { navController.popBackStack() },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
-                            colors = CardDefaults.cardColors(
-                                containerColor = Color(0xFFFFE082) // Amarillo claro
+                                .height(50.dp)
+                                .clip(RoundedCornerShape(12.dp)),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFF8B4513),
+                                contentColor = Color.White
                             )
                         ) {
-                            Column(
-                                modifier = Modifier.padding(16.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(
-                                    text = "Módulo Resiliente (E0)",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = Color(0xFF8B4513) // Marrón
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Text(
-                                    text = "${it.e0} kg/cm2",
-                                    style = MaterialTheme.typography.headlineSmall,
-                                    color = Color.Black
-                                )
-                                Spacer(modifier = Modifier.height(16.dp))
-                                Text(
-                                    text = "Valor de Soporte (CBR)",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = Color(0xFF8B4513) // Marrón
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Text(
-                                    text = "${it.cbr} %",
-                                    style = MaterialTheme.typography.headlineSmall,
-                                    color = Color.Black
-                                )
-                            }
+                            Text("Realizar nuevo cálculo", style = MaterialTheme.typography.bodyLarge)
+                        }
+                        Spacer(modifier = Modifier.height(50.dp))
+                        Box(
+                            modifier = Modifier
+                                .size(200.dp)
+                                .border(2.dp, Color(0xFF8B4513), shape = RoundedCornerShape(8.dp))
+                                .shadow(4.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.fondo),
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize()
+                            )
                         }
                     }
-                } ?: run {
-                    Text(
-                        text = "Ingrese los datos para ver los resultados",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = Color.Gray,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(16.dp)
-                    )
-                }
-                Button(
-                    onClick = { navController.popBackStack() },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF8B4513), // Marrón
-                        contentColor = Color.White
-                    )
-                ) {
-                    Text("Realizar nuevo cálculo")
-                }
-                Spacer(modifier = Modifier.height(100.dp))
-                Box(
-                    modifier = Modifier
-                        .size(200.dp)
-                        .border(2.dp, Color.Black, shape = RoundedCornerShape(8.dp)) // Aquí defines el marco
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.fondo),
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize()
-                    )
                 }
             }
         }
-    }
+    )
 }
 
